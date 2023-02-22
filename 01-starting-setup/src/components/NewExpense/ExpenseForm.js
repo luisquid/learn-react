@@ -3,6 +3,7 @@ import './ExpenseForm.css';
 
 const ExpenseForm = (props) => {
 
+    const [showForm, setShowForm] = useState(false);
     // const [enteredTitle, setEnteredTitle] = useState('');
     // const [enteredAmount, setEnteredAmount] = useState('');
     // const [enteredDate, setEnteredDate] = useState('');
@@ -51,14 +52,31 @@ const ExpenseForm = (props) => {
         const expenseData = {
             title: userInput.enteredTitle,
             amount: userInput.enteredAmount,
-            date: new Date(userInput.enteredDate)
+            date: new Date(userInput.enteredDate  + 'T00:00:00')
         };
         
         props.onSaveExpenseData(expenseData);
 
         setUserInput({enteredDate:"", enteredAmount:"", enteredTitle:""});
-        console.log(expenseData);
+        setShowForm(false);
     };
+
+    const showHandler = () => {
+        setShowForm(true);
+    }
+
+    const cancelHandler = () => {
+        setShowForm(false);
+    }
+
+    if(!showForm)
+    {
+        return(
+                <div className = "new-expense__action">
+                    <button type = "submit" onClick ={showHandler}>Add New Expense</button>
+                </div>   
+                )
+    }
 
     return( 
     <form onSubmit={submitHandler}>
@@ -76,7 +94,8 @@ const ExpenseForm = (props) => {
                 <input type="date" value = {userInput.enteredDate} min="2019-01-01" max="2025-12-31" onChange={dateChangeHandler}/>
             </div>
         </div>
-        <div className = "new-expense__action">
+        <div className = "new-expense__actions">
+            <button type = "button" onClick = {cancelHandler}>Cancel</button>
             <button type = "submit">Add Expense</button>
         </div>
     </form>)
